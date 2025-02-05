@@ -49,25 +49,56 @@ console.log(ativoMovel.documentos());
 let conta = false;
 
 while (conta != true) {
-  let patrimonioInicial = parseInt(prompt("Quanto é o valor inicial?"));
-  let aporteMensal = parseInt(prompt("Quanto será o aporte mensal?"));
-  let jurosAnual = parseInt(prompt("Qual taxa de Juros anual?"));
+  let botaoCalc = document.querySelector(".calculadora");
 
-  conta = window.confirm(
-    `Seu patrimonio Inial: R$${patrimonioInicial}, aporte mensais de R$${aporteMensal} com juros anual de ${jurosAnual}%`
-  );
+  botaoCalc.addEventListener("click", function () {
+    calcular();
+  });
 
-  if (conta == true) {
-    calculoPatrimonio(patrimonioInicial, aporteMensal, jurosAnual);
-  } else {
-    alert("Certo! Insira os valores novamente!");
+  function calcular() {
+    let patrimonioInicial = document.getElementById("patrimonioInicial");
+    let aporteMensal = document.getElementById("aporteMensal");
+    let jurosAnual = document.getElementById("aporteMensal");
+    let periodo = documento.getElementById("periodo");
+
+    let patrimonioValor = parseFloat(patrimonioInicial.value);
+    let aporteValor = parseFloat(aporteMensal.value);
+    let jurosValor = parseFloat(jurosAnual.value);
+    let periodoInventimento = parseFloat(periodo.value);
+
+    conta = window.confirm(
+      `Seu patrimonio Inial: R$${patrimonioValor}, aporte mensais de R$${aporteMensal} com juros anual de ${jurosAnual}%`
+    );
+
+    if (conta == true) {
+      calculoPatrimonio(
+        patrimonioValor,
+        aporteValor,
+        jurosValor,
+        periodoInventimento
+      );
+    } else {
+      alert("Certo! Insira os valores novamente!");
+    }
   }
 }
 
-function calculoPatrimonio(patrimonioInicial, aporteMensal, jurosAnual) {
-  let totalInvestido = patrimonioInicial + aporteMensal * 12;
-  alert(`O Valor total investido foi R$${totalInvestido}`);
+function calculoPatrimonio(
+  patrimonioInicial,
+  aporteMensal,
+  jurosAnual,
+  periodo
+) {
+  let meses = periodo * 12;
+  let jurosMensal = jurosAnual / 100 / 12;
 
-  let totalJuros = totalInvestido * (jurosAnual / 100);
-  alert(`O valor total de Juros foi R$${totalJuros}`);
+  let patrimonioFinal =
+    patrimonioInicial * Math.pow(1 + jurosMensal, meses) +
+    (aporteMensal * (Math.pow(1 + jurosMensal, meses) - 1)) / jurosMensal;
+
+  alert(
+    `Após o periodo de ${periodo} investindo, tera um patrimonio final de R$${patrimonioFinal.toFixed(
+      2
+    )}`
+  );
 }
