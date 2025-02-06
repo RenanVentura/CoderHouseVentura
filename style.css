@@ -1,9 +1,0 @@
-.formulario{
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-}
-
-.calculadora{
-    width: 50%;
-}

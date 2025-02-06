@@ -46,43 +46,45 @@ console.log(ativoMovel.documentos());
 
 // --------------- Logica ------------------
 
-let conta = false;
+let botaoCalc = document.querySelector(".calculadora");
 
-while (conta != true) {
-  let botaoCalc = document.querySelector(".calculadora");
+botaoCalc.addEventListener("click", function () {
+  calcular();
+});
 
-  botaoCalc.addEventListener("click", function () {
-    calcular();
-  });
+function calcular() {
+  let patrimonioInicial = document.querySelector(".patrimonioInicial");
+  let aporteMensal = document.querySelector(".aporteMensal");
+  let jurosAnual = document.querySelector(".jurosAnual");
+  let periodo = document.querySelector(".periodo");
 
-  function calcular() {
-    let patrimonioInicial = document.getElementById("patrimonioInicial");
-    let aporteMensal = document.getElementById("aporteMensal");
-    let jurosAnual = document.getElementById("aporteMensal");
-    let periodo = documento.getElementById("periodo");
+  console.log(patrimonioInicial, aporteMensal, jurosAnual, periodo);
 
-    let patrimonioValor = parseFloat(patrimonioInicial.value);
-    let aporteValor = parseFloat(aporteMensal.value);
-    let jurosValor = parseFloat(jurosAnual.value);
-    let periodoInventimento = parseFloat(periodo.value);
+  if (!patrimonioInicial || !aporteMensal || !jurosAnual || !periodo) {
+    alert("Erro: Campos não encontrados!");
+    return;
+  }
 
-    conta = window.confirm(
-      `Seu patrimonio Inial: R$${patrimonioValor}, aporte mensais de R$${aporteMensal} com juros anual de ${jurosAnual}%`
+  let patrimonioValor = parseFloat(patrimonioInicial.value);
+  let aporteValor = parseFloat(aporteMensal.value);
+  let jurosValor = parseFloat(jurosAnual.value);
+  let periodoInventimento = parseFloat(periodo.value);
+
+  let conta = window.confirm(
+    `Seu patrimônio Inicial: R$${patrimonioValor}, aportes mensais de R$${aporteValor} com juros anual de ${jurosValor}%`
+  );
+
+  if (conta) {
+    calculoPatrimonio(
+      patrimonioValor,
+      aporteValor,
+      jurosValor,
+      periodoInventimento
     );
-
-    if (conta == true) {
-      calculoPatrimonio(
-        patrimonioValor,
-        aporteValor,
-        jurosValor,
-        periodoInventimento
-      );
-    } else {
-      alert("Certo! Insira os valores novamente!");
-    }
+  } else {
+    alert("Certo! Insira os valores novamente!");
   }
 }
-
 function calculoPatrimonio(
   patrimonioInicial,
   aporteMensal,
@@ -94,10 +96,11 @@ function calculoPatrimonio(
 
   let patrimonioFinal =
     patrimonioInicial * Math.pow(1 + jurosMensal, meses) +
-    (aporteMensal * (Math.pow(1 + jurosMensal, meses) - 1)) / jurosMensal;
+    ((aporteMensal * (Math.pow(1 + jurosMensal, meses) - 1)) / jurosMensal) *
+      (1 + jurosMensal);
 
   alert(
-    `Após o periodo de ${periodo} investindo, tera um patrimonio final de R$${patrimonioFinal.toFixed(
+    `Após o período de ${periodo} anos investindo, terá um patrimônio final de R$${patrimonioFinal.toFixed(
       2
     )}`
   );
