@@ -53,12 +53,10 @@ botaoCalc.addEventListener("click", function () {
 });
 
 function calcular() {
-  let patrimonioInicial = document.querySelector(".patrimonioInicial");
-  let aporteMensal = document.querySelector(".aporteMensal");
-  let jurosAnual = document.querySelector(".jurosAnual");
-  let periodo = document.querySelector(".periodo");
-
-  console.log(patrimonioInicial, aporteMensal, jurosAnual, periodo);
+  let patrimonioInicial = document.getElementById("patrimonioInicial");
+  let aporteMensal = document.getElementById("aporteMensal");
+  let jurosAnual = document.getElementById("jurosAnual");
+  let periodo = document.getElementById("periodo");
 
   if (!patrimonioInicial || !aporteMensal || !jurosAnual || !periodo) {
     alert("Erro: Campos não encontrados!");
@@ -85,6 +83,7 @@ function calcular() {
     alert("Certo! Insira os valores novamente!");
   }
 }
+
 function calculoPatrimonio(
   patrimonioInicial,
   aporteMensal,
@@ -104,4 +103,56 @@ function calculoPatrimonio(
       2
     )}`
   );
+
+  gerarGrafico(patrimonioInicial, aporteMensal, jurosMensal, meses);
+}
+
+function gerarGrafico(patrimonioInicial, aporteMensal, jurosMensal, meses) {
+  let patrimonios = [];
+  let labels = [];
+
+  for (let i = 0; i <= meses; i++) {
+    let valorPatrimonio =
+      patrimonioInicial * Math.pow(1 + jurosMensal, i) +
+      ((aporteMensal * (Math.pow(1 + jurosMensal, i) - 1)) / jurosMensal) *
+        (1 + jurosMensal);
+    patrimonios.push(valorPatrimonio);
+    labels.push(`Mês ${i}`);
+  }
+
+  const ctx = document.getElementById("graficoPatrimonio").getContext("2d");
+
+  new Chart(ctx, {
+    type: "line",
+    data: {
+      labels: labels,
+      datasets: [
+        {
+          label: "Evolução do Patrimônio",
+          data: patrimonios,
+          borderColor: "rgba(75, 192, 192, 1)",
+          backgroundColor: "rgba(75, 192, 192, 0.2)",
+          fill: true,
+        },
+      ],
+    },
+    options: {
+      responsive: true,
+      scales: {
+        x: {
+          title: {
+            display: true,
+            text: "Meses",
+          },
+        },
+        y: {
+          title: {
+            display: true,
+            text: "Patrimônio (R$)",
+          },
+          beginAtZero: false,
+        },
+      },
+    },
+  });
 }
