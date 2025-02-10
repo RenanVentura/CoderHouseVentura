@@ -84,6 +84,8 @@ function calcular() {
   }
 }
 
+// Função para efetuar calculo com juros compostos!
+
 function calculoPatrimonio(
   patrimonioInicial,
   aporteMensal,
@@ -98,6 +100,18 @@ function calculoPatrimonio(
     ((aporteMensal * (Math.pow(1 + jurosMensal, meses) - 1)) / jurosMensal) *
       (1 + jurosMensal);
 
+  let patrimonioSemJuros = patrimonioInicial + aporteMensal * meses;
+  let totalJuros = patrimonioFinal - patrimonioSemJuros;
+
+  document.getElementById("valorFinalJuros").innerText =
+    "R$" + patrimonioFinal.toFixed(2);
+  document.getElementById("valorFinalSemJuros").innerText =
+    "R$" + patrimonioSemJuros.toFixed(2);
+  document.getElementById("totalJuros").innerText =
+    "R$" + totalJuros.toFixed(2);
+
+  document.getElementById("resumoPatrimonio").classList.remove("d-none");
+
   alert(
     `Após o período de ${periodo} anos investindo, terá um patrimônio final de R$${patrimonioFinal.toFixed(
       2
@@ -107,8 +121,10 @@ function calculoPatrimonio(
   gerarGrafico(patrimonioInicial, aporteMensal, jurosMensal, meses);
 }
 
+// Plota o Grafico utilizando o Canvas
 function gerarGrafico(patrimonioInicial, aporteMensal, jurosMensal, meses) {
   let patrimonios = [];
+  let patrimoniosSemJuros = [];
   let labels = [];
 
   for (let i = 0; i <= meses; i++) {
@@ -116,11 +132,17 @@ function gerarGrafico(patrimonioInicial, aporteMensal, jurosMensal, meses) {
       patrimonioInicial * Math.pow(1 + jurosMensal, i) +
       ((aporteMensal * (Math.pow(1 + jurosMensal, i) - 1)) / jurosMensal) *
         (1 + jurosMensal);
+
+    let valorPatrimonioSemJuros = patrimonioInicial + aporteMensal * i;
+
     patrimonios.push(valorPatrimonio);
+    patrimoniosSemJuros.push(valorPatrimonioSemJuros);
     labels.push(`Mês ${i}`);
   }
 
   const ctx = document.getElementById("graficoPatrimonio").getContext("2d");
+  const canvas = document.getElementById("graficoPatrimonio");
+  canvas.style.height = "400px";
 
   new Chart(ctx, {
     type: "line",
@@ -128,16 +150,32 @@ function gerarGrafico(patrimonioInicial, aporteMensal, jurosMensal, meses) {
       labels: labels,
       datasets: [
         {
-          label: "Evolução do Patrimônio",
+          label: "Patrimônio com Juros",
           data: patrimonios,
           borderColor: "rgba(75, 192, 192, 1)",
           backgroundColor: "rgba(75, 192, 192, 0.2)",
+          borderWidth: 2,
           fill: true,
+          tension: 0.8,
+          pointRadius: 0,
+          pointHoverRadius: 0,
+        },
+        {
+          label: "Patrimônio Sem Juros",
+          data: patrimoniosSemJuros,
+          borderColor: "rgb(255, 0, 0)",
+          backgroundColor: "rgba(255, 0, 0, 0.2)",
+          borderWidth: 2,
+          fill: false,
+          tension: 0.8,
+          pointRadius: 0,
+          pointHoverRadius: 0,
         },
       ],
     },
     options: {
       responsive: true,
+      maintainAspectRatio: false,
       scales: {
         x: {
           title: {

@@ -46,8 +46,43 @@
             </div>
         </div>
     </div>
-    <div class="d-flex justify-content-center w-70 mt-4">
-        <canvas id="graficoPatrimonio" height="200"></canvas>
+    <!-- Adição após clicar na botão calcular, cards com valores -->
+
+    <div class="container d-flex flex-column align-items-center" style="max-width: 80%;">
+    <div id="resumoPatrimonio" class="row g-3 d-none mt-4">
+        <div class="col-md-4">
+          <div class="card text-center border-primary " style="min-width: 250px;">
+            <div class="cardValor">
+              <h5 class="card-title">Valor Final com Juros</h5>
+              <p class="card-text fw-bold text-primary fs-2" id="valorFinalJuros">R$ 0,00</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="card text-center border-success" style="min-width: 250px;">
+            <div class="cardValor">
+              <h5 class="card-title">Valor Final sem Juros</h5>
+              <p class="card-text fw-bold text-success fs-2" id="valorFinalSemJuros">R$ 0,00</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="card text-center border-danger" style="min-width: 250px;"> 
+            <div class="cardValor">
+              <h5 class="card-title">Total em Juros</h5>
+              <p class="card-text fw-bold text-danger fs-2" id="totalJuros">R$ 0,00</p>
+            </div>
+          </div>
+        </div>
+    </div>
+</div>
+
+    <!-- Adição após clicar na botão calcular, Grafico com valores -->
+
+    <div class="d-flex justify-content-center w-100 mt-4">
+        <div class="w-80" style="max-width: 1000px;">
+            <canvas id="graficoPatrimonio"></canvas>
+        </div>
     </div>
     <script src="./script.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
