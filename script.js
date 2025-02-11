@@ -104,11 +104,11 @@ function calculoPatrimonio(
   let totalJuros = patrimonioFinal - patrimonioSemJuros;
 
   document.getElementById("valorFinalJuros").innerText =
-    "R$" + patrimonioFinal.toFixed(2);
+    "R$" + patrimonioFinal.toLocaleString();
   document.getElementById("valorFinalSemJuros").innerText =
-    "R$" + patrimonioSemJuros.toFixed(2);
+    "R$" + patrimonioSemJuros.toLocaleString(2);
   document.getElementById("totalJuros").innerText =
-    "R$" + totalJuros.toFixed(2);
+    "R$" + totalJuros.toLocaleString();
 
   document.getElementById("resumoPatrimonio").classList.remove("d-none");
 
