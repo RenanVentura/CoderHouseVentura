@@ -88,7 +88,6 @@ const obterTaxaSelic = () => {
 //   .then((data) => console.log("Taxa Selic:", data))
 //   .catch((error) => console.log("Erro na API:", error));
 
-// Seleciona o botão "Taxa Selic" (certifique-se que no HTML o botão possua a classe "selic")
 let botaoSelic = document.querySelector(".selic");
 
 botaoSelic.addEventListener("click", async function () {
