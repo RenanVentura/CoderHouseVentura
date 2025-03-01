@@ -33,19 +33,74 @@ const ativoImobiliario = new CadastroAtivo("Duplex", 700000, "Imobiliario", {
   bairro: "Centro",
   noCentro: true,
 });
-console.log(ativoImobiliario);
-console.log(ativoImobiliario.localizacao());
+// console.log(ativoImobiliario);
+// console.log(ativoImobiliario.localizacao());
 
 const ativoMovel = new CadastroAtivo("Lancer X", 80000, "Movel", {
   ano: 2024,
   fabricacao: 2023,
 });
 
-console.log(ativoMovel);
-console.log(ativoMovel.documentos());
+// console.log(ativoMovel);
+// console.log(ativoMovel.documentos());
 
 // --------------- Logica ------------------
 
+//Consumo de API
+
+const obterTaxaSelic = () => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const hoje = new Date();
+      let dataAjustada = new Date(hoje);
+      const diaDaSemana = hoje.getDay();
+
+      if (diaDaSemana === 0) {
+        dataAjustada.setDate(hoje.getDate() - 2);
+      } else if (diaDaSemana === 6) {
+        dataAjustada.setDate(hoje.getDate() - 1);
+      }
+
+      const formatarData = (data) => {
+        const dia = ("0" + data.getDate()).slice(-2);
+        const mes = ("0" + (data.getMonth() + 1)).slice(-2);
+        const ano = data.getFullYear();
+        return `${dia}/${mes}/${ano}`;
+      };
+
+      const dataFormatada = formatarData(dataAjustada);
+
+      const url = `https://api.bcb.gov.br/dados/serie/bcdata.sgs.432/dados?formato=json&dataInicial=${dataFormatada}&dataFinal=${dataFormatada}`;
+
+      const resposta = await fetch(url);
+      const dados = await resposta.json();
+
+      const taxaSelicAtual = dados[0].valor;
+      resolve(taxaSelicAtual);
+    } catch (erro) {
+      reject(erro);
+    }
+  });
+};
+
+// Teste inicial (opcional)
+// obterTaxaSelic()
+//   .then((data) => console.log("Taxa Selic:", data))
+//   .catch((error) => console.log("Erro na API:", error));
+
+// Seleciona o botão "Taxa Selic" (certifique-se que no HTML o botão possua a classe "selic")
+let botaoSelic = document.querySelector(".selic");
+
+botaoSelic.addEventListener("click", async function () {
+  try {
+    const taxaSelicAtual = await obterTaxaSelic();
+    document.getElementById("jurosAnual").value = taxaSelicAtual;
+  } catch (erro) {
+    console.error("Erro ao obter a Taxa Selic:", erro);
+  }
+});
+
+// Seleciona o botão de calcular
 let botaoCalc = document.querySelector(".calculadora");
 
 botaoCalc.addEventListener("click", function () {
@@ -58,34 +113,38 @@ function calcular() {
   let jurosAnual = document.getElementById("jurosAnual");
   let periodo = document.getElementById("periodo");
 
-  if (!patrimonioInicial || !aporteMensal || !jurosAnual || !periodo) {
-    alert("Erro: Campos não encontrados!");
+  let patrimonioValor = parseFloat(patrimonioInicial.value);
+  let aporteValor = parseFloat(aporteMensal.value) || 0;
+  let jurosValor = parseFloat(jurosAnual.value);
+  let periodoInvestimento = parseFloat(periodo.value);
+
+  if (
+    isNaN(patrimonioValor) ||
+    isNaN(jurosValor) ||
+    isNaN(periodoInvestimento)
+  ) {
+    swal("Preencha todos os campos!");
     return;
   }
 
-  let patrimonioValor = parseFloat(patrimonioInicial.value);
-  let aporteValor = parseFloat(aporteMensal.value);
-  let jurosValor = parseFloat(jurosAnual.value);
-  let periodoInventimento = parseFloat(periodo.value);
-
-  let conta = window.confirm(
-    `Seu patrimônio Inicial: R$${patrimonioValor}, aportes mensais de R$${aporteValor} com juros anual de ${jurosValor}%`
-  );
-
-  if (conta) {
-    calculoPatrimonio(
-      patrimonioValor,
-      aporteValor,
-      jurosValor,
-      periodoInventimento
-    );
-  } else {
-    alert("Certo! Insira os valores novamente!");
-  }
+  swal({
+    title: `Seu patrimônio inicial: R$${patrimonioValor}, aportes mensais de R$${aporteValor} com juros anual de ${jurosValor}%`,
+    buttons: ["Cancelar", "Calcular!"],
+  }).then((confirmado) => {
+    if (confirmado) {
+      calculoPatrimonio(
+        patrimonioValor,
+        aporteValor,
+        jurosValor,
+        periodoInvestimento
+      );
+    } else {
+      alert("Certo! Insira os valores novamente!");
+    }
+  });
 }
 
-// Função para efetuar calculo com juros compostos!
-
+// Função para efetuar o cálculo com juros compostos
 function calculoPatrimonio(
   patrimonioInicial,
   aporteMensal,
@@ -104,24 +163,30 @@ function calculoPatrimonio(
   let totalJuros = patrimonioFinal - patrimonioSemJuros;
 
   document.getElementById("valorFinalJuros").innerText =
-    "R$" + patrimonioFinal.toLocaleString();
+    "R$ " +
+    patrimonioFinal.toLocaleString("pt-BR", {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    });
   document.getElementById("valorFinalSemJuros").innerText =
-    "R$" + patrimonioSemJuros.toLocaleString(2);
+    "R$ " +
+    patrimonioSemJuros.toLocaleString("pt-BR", {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    });
   document.getElementById("totalJuros").innerText =
-    "R$" + totalJuros.toLocaleString();
+    "R$ " +
+    totalJuros.toLocaleString("pt-BR", {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    });
 
   document.getElementById("resumoPatrimonio").classList.remove("d-none");
-
-  alert(
-    `Após o período de ${periodo} anos investindo, terá um patrimônio final de R$${patrimonioFinal.toFixed(
-      2
-    )}`
-  );
 
   gerarGrafico(patrimonioInicial, aporteMensal, jurosMensal, meses);
 }
 
-// Plota o Grafico utilizando o Canvas
+// Plota o gráfico utilizando o Canvas
 function gerarGrafico(patrimonioInicial, aporteMensal, jurosMensal, meses) {
   let patrimonios = [];
   let patrimoniosSemJuros = [];
