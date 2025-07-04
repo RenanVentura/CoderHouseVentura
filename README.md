@@ -1,4 +1,4 @@
-# 📈 Calculadora de Juros Compostos com Cotação do Dólar
+# 📈 Calculadora de Juros Compostos com Taxa Selic
 
 Este projeto foi desenvolvido como **trabalho final do Curso de JavaScript da Coderhouse** 🎓.
 
@@ -11,7 +11,7 @@ A aplicação é uma **calculadora de juros compostos**, com interface moderna e
 - ⚙️ **JavaScript (Vanilla)** – Lógica de cálculo e requisições à API  
 - 🧾 **HTML5** – Estrutura da aplicação  
 - 🎨 **Tailwind CSS** – Estilização responsiva e moderna  
-- 🌐 **API do Banco Central** – Consulta da cotação atual do dólar (PTAX)
+- 🌐 **API do Banco Central** – Consulta da Taxa Selic Atual (PTAX)
 
 ---
 
@@ -23,6 +23,6 @@ A aplicação é uma **calculadora de juros compostos**, com interface moderna e
   - Taxa de juros mensal (%)
   - Tempo em meses
 
-- Exibição do valor final em **real** e **dólar**
-- Consumo da API do Banco Central para cotação do dia
+- Exibição do valor final em **real**
+- Consumo da API do Banco Central para taxa do dia
 - Interface limpa e responsiva com Tailwind CSS
