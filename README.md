@@ -2,7 +2,9 @@
 
 Este projeto foi desenvolvido como **trabalho final do Curso de JavaScript da Coderhouse** 🎓.
 
-A aplicação é uma **calculadora de juros compostos**, com interface moderna e responsiva construída com **Tailwind CSS**, que permite calcular valores futuros de investimentos. Além disso, realiza a **conversão dos valores com base na cotação atual do dólar**, utilizando dados da **API oficial do Banco Central do Brasil**.
+A aplicação é uma **calculadora de juros compostos**, com interface moderna e responsiva construída com **Tailwind CSS**, que permite calcular valores futuros de investimentos. Além disso, utiliza em tempo real a **Taxa de Juros Selic**, utilizando dados da **API oficial do Banco Central do Brasil**.
+
+Disponivel o link: https://renanventura.github.io/CoderHouseVentura/
 
 ---
 
