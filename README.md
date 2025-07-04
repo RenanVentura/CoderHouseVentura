@@ -19,8 +19,10 @@ A aplicação é uma **calculadora de juros compostos**, com interface moderna e
 
 - Cálculo de juros compostos baseado em:
   - Valor inicial (capital)
+  - Aportes Mensais
   - Taxa de juros mensal (%)
   - Tempo em meses
+
 - Exibição do valor final em **real** e **dólar**
 - Consumo da API do Banco Central para cotação do dia
 - Interface limpa e responsiva com Tailwind CSS
